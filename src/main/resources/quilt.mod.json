@@ -1,0 +1,38 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "io.github.prismwork",
+		"id": "flexible_arms",
+		"version": "${version}",
+		"metadata": {
+			"name": "Flexible Arms",
+			"description": "Library mod allowing adjusting arm positions in item JSON models. Inspired by the great Bl\u00e5haj mod.",
+			"contributors": {
+				"Prismwork": "Owner",
+				"Flamarine": "Developer"
+			},
+			"icon": "assets/flexible_arms/icon.png",
+			"license": {
+				"name": "MIT License",
+				"id": "MIT",
+				"url": "https://spdx.org/licenses/MIT.html"
+			}
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.19.1"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.20"
+			}
+		]
+	},
+	"mixin": "flexible_arms.mixins.json",
+	"minecraft": {
+		"environment": "client"
+	}
+}
