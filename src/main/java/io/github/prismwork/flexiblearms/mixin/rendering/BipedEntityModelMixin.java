@@ -17,15 +17,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BipedEntityModel.class)
 public abstract class BipedEntityModelMixin {
-	@Shadow
-	public @Final ModelPart rightArm;
-
-	@Shadow
-	public @Final ModelPart leftArm;
-
-	@Shadow
-	@Final
-	public ModelPart head;
+	@Shadow public @Final ModelPart rightArm;
+	@Shadow public @Final ModelPart leftArm;
+	@Shadow public @Final ModelPart head;
 
 	@Inject(
 		method = "positionRightArm",
@@ -41,33 +35,39 @@ public abstract class BipedEntityModelMixin {
 
 		ArmModelsContainer rightHandModel = (ArmModelsContainer) rightHandBakedModel;
 
-		boolean rightArmFollowSightOnRightModel = rightHandModel.rightArmFollowSight() != null ?
-			rightHandModel.rightArmFollowSight() : true;
-		if (rightHandModel.getRightArmYaw() != null)
+		boolean rightArmFollowSightOnRightModel = rightHandModel.getRightArmModelProperties().rightArmFollowSight() != null ?
+			rightHandModel.getRightArmModelProperties().rightArmFollowSight() : true;
+		if (rightHandModel.getRightArmModelProperties().getRightArmYaw() != null)
 			this.rightArm.yaw = rightArmFollowSightOnRightModel ?
-				rightHandModel.getRightArmYaw() + this.head.yaw :
-				rightHandModel.getRightArmYaw();
-		if (rightHandModel.getRightArmPitch() != null)
+				rightHandModel.getRightArmModelProperties().getRightArmYaw() + this.head.yaw :
+				rightHandModel.getRightArmModelProperties().getRightArmYaw();
+		if (rightHandModel.getRightArmModelProperties().getRightArmPitch() != null)
 			this.rightArm.pitch = rightArmFollowSightOnRightModel ?
-				rightHandModel.getRightArmPitch() + this.head.pitch :
-				rightHandModel.getRightArmPitch();
+				rightHandModel.getRightArmModelProperties().getRightArmPitch() + this.head.pitch :
+				rightHandModel.getRightArmModelProperties().getRightArmPitch();
+		if (rightHandModel.getRightArmModelProperties().getRightArmRoll() != null)
+			this.rightArm.roll = rightHandModel.getRightArmModelProperties().getRightArmRoll();
 
-		boolean leftArmFollowSightOnRightModel = rightHandModel.leftArmFollowSight() != null ?
-			rightHandModel.leftArmFollowSight() : true;
-		if (rightHandModel.getLeftArmYaw() != null)
+		boolean leftArmFollowSightOnRightModel = rightHandModel.getRightArmModelProperties().leftArmFollowSight() != null ?
+			rightHandModel.getRightArmModelProperties().leftArmFollowSight() : true;
+		if (rightHandModel.getRightArmModelProperties().getLeftArmYaw() != null)
 			this.leftArm.yaw = leftArmFollowSightOnRightModel ?
-				rightHandModel.getLeftArmYaw() + this.head.yaw :
-				rightHandModel.getLeftArmYaw();
-		if (rightHandModel.getLeftArmPitch() != null)
+				rightHandModel.getRightArmModelProperties().getLeftArmYaw() + this.head.yaw :
+				rightHandModel.getRightArmModelProperties().getLeftArmYaw();
+		if (rightHandModel.getRightArmModelProperties().getLeftArmPitch() != null)
 			this.leftArm.pitch = leftArmFollowSightOnRightModel ?
-				rightHandModel.getLeftArmPitch() + this.head.pitch :
-				rightHandModel.getLeftArmPitch();
+				rightHandModel.getRightArmModelProperties().getLeftArmPitch() + this.head.pitch :
+				rightHandModel.getRightArmModelProperties().getLeftArmPitch();
+		if (rightHandModel.getRightArmModelProperties().getLeftArmRoll() != null)
+			this.leftArm.roll = rightHandModel.getRightArmModelProperties().getLeftArmRoll();
 
 		if (
-			rightHandModel.getRightArmYaw() != null ||
-			rightHandModel.getRightArmPitch() != null ||
-			rightHandModel.getLeftArmYaw() != null ||
-			rightHandModel.getLeftArmPitch() != null
+			rightHandModel.getRightArmModelProperties().getRightArmYaw() != null ||
+			rightHandModel.getRightArmModelProperties().getRightArmPitch() != null ||
+			rightHandModel.getRightArmModelProperties().getRightArmRoll() != null ||
+			rightHandModel.getRightArmModelProperties().getLeftArmYaw() != null ||
+			rightHandModel.getRightArmModelProperties().getLeftArmPitch() != null ||
+			rightHandModel.getRightArmModelProperties().getLeftArmRoll() != null
 		) ci.cancel();
 	}
 
@@ -89,33 +89,39 @@ public abstract class BipedEntityModelMixin {
 			new ArmModelsContainer.Dummy();
 		ArmModelsContainer leftHandModel = (ArmModelsContainer) leftHandBakedModel;
 
-		boolean rightArmFollowSightOnLeftModel = leftHandModel.rightArmFollowSight() != null ?
-			leftHandModel.rightArmFollowSight() : true;
-		if (leftHandModel.getRightArmYaw() != null && rightHandModel.getRightArmYaw() == null)
+		boolean rightArmFollowSightOnLeftModel = leftHandModel.getLeftArmModelProperties().rightArmFollowSight() != null ?
+			leftHandModel.getLeftArmModelProperties().rightArmFollowSight() : true;
+		if (leftHandModel.getLeftArmModelProperties().getRightArmYaw() != null && rightHandModel.getRightArmModelProperties().getRightArmYaw() == null)
 			this.rightArm.yaw = rightArmFollowSightOnLeftModel ?
-				leftHandModel.getRightArmYaw() + this.head.yaw :
-				leftHandModel.getRightArmYaw();
-		if (leftHandModel.getRightArmPitch() != null && rightHandModel.getRightArmPitch() == null)
+				leftHandModel.getLeftArmModelProperties().getRightArmYaw() + this.head.yaw :
+				leftHandModel.getLeftArmModelProperties().getRightArmYaw();
+		if (leftHandModel.getLeftArmModelProperties().getRightArmPitch() != null && rightHandModel.getRightArmModelProperties().getRightArmPitch() == null)
 			this.rightArm.pitch = rightArmFollowSightOnLeftModel ?
-				leftHandModel.getRightArmPitch() + this.head.pitch :
-				leftHandModel.getRightArmPitch();
+				leftHandModel.getLeftArmModelProperties().getRightArmPitch() + this.head.pitch :
+				leftHandModel.getLeftArmModelProperties().getRightArmPitch();
+		if (leftHandModel.getLeftArmModelProperties().getRightArmRoll() != null && rightHandModel.getRightArmModelProperties().getRightArmRoll() == null)
+			this.rightArm.roll = leftHandModel.getLeftArmModelProperties().getRightArmRoll();
 
-		boolean leftArmFollowSightOnLeftModel = leftHandModel.leftArmFollowSight() != null ?
-			leftHandModel.leftArmFollowSight() : true;
-		if (leftHandModel.getLeftArmYaw() != null && rightHandModel.getLeftArmYaw() == null)
+		boolean leftArmFollowSightOnLeftModel = leftHandModel.getLeftArmModelProperties().leftArmFollowSight() != null ?
+			leftHandModel.getLeftArmModelProperties().leftArmFollowSight() : true;
+		if (leftHandModel.getLeftArmModelProperties().getLeftArmYaw() != null && rightHandModel.getRightArmModelProperties().getLeftArmYaw() == null)
 			this.leftArm.yaw = leftArmFollowSightOnLeftModel ?
-				leftHandModel.getLeftArmYaw() + this.head.yaw :
-				leftHandModel.getLeftArmYaw();
-		if (leftHandModel.getLeftArmPitch() != null && rightHandModel.getLeftArmPitch() == null)
+				leftHandModel.getLeftArmModelProperties().getLeftArmYaw() + this.head.yaw :
+				leftHandModel.getLeftArmModelProperties().getLeftArmYaw();
+		if (leftHandModel.getLeftArmModelProperties().getLeftArmPitch() != null && rightHandModel.getRightArmModelProperties().getLeftArmPitch() == null)
 			this.leftArm.pitch = leftArmFollowSightOnLeftModel ?
-				leftHandModel.getLeftArmPitch() + this.head.pitch :
-				leftHandModel.getLeftArmPitch();
+				leftHandModel.getLeftArmModelProperties().getLeftArmPitch() + this.head.pitch :
+				leftHandModel.getLeftArmModelProperties().getLeftArmPitch();
+		if (leftHandModel.getLeftArmModelProperties().getLeftArmRoll() != null && rightHandModel.getRightArmModelProperties().getLeftArmRoll() == null)
+			this.leftArm.roll = leftHandModel.getLeftArmModelProperties().getLeftArmRoll();
 
 		if (
-			(leftHandModel.getRightArmYaw() != null && rightHandModel.getRightArmYaw() == null) ||
-			(leftHandModel.getRightArmPitch() != null && rightHandModel.getRightArmPitch() == null) ||
-			(leftHandModel.getLeftArmYaw() != null && rightHandModel.getLeftArmYaw() == null) ||
-			(leftHandModel.getLeftArmPitch() != null && rightHandModel.getLeftArmPitch() == null)
+			(leftHandModel.getLeftArmModelProperties().getRightArmYaw() != null && rightHandModel.getRightArmModelProperties().getRightArmYaw() == null) ||
+			(leftHandModel.getLeftArmModelProperties().getRightArmPitch() != null && rightHandModel.getRightArmModelProperties().getRightArmPitch() == null) ||
+			(leftHandModel.getLeftArmModelProperties().getRightArmRoll() != null && rightHandModel.getRightArmModelProperties().getRightArmRoll() == null) ||
+			(leftHandModel.getLeftArmModelProperties().getLeftArmYaw() != null && rightHandModel.getRightArmModelProperties().getLeftArmYaw() == null) ||
+			(leftHandModel.getLeftArmModelProperties().getLeftArmPitch() != null && rightHandModel.getRightArmModelProperties().getLeftArmPitch() == null) ||
+			(leftHandModel.getLeftArmModelProperties().getLeftArmRoll() != null && rightHandModel.getRightArmModelProperties().getLeftArmRoll() == null)
 		) ci.cancel();
 	}
 }

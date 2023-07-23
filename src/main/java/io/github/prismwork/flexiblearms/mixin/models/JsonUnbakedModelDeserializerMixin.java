@@ -3,6 +3,7 @@ package io.github.prismwork.flexiblearms.mixin.models;
 import com.google.gson.JsonObject;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import io.github.prismwork.flexiblearms.util.ArmModelProperties;
 import io.github.prismwork.flexiblearms.util.ArmModelsContainer;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,41 +16,23 @@ public abstract class JsonUnbakedModelDeserializerMixin {
 		JsonUnbakedModel original,
 		@Local(ordinal = 0) JsonObject json
 	) {
-		Float leftArmYaw = null;
-		Float leftArmPitch = null;
-		Float rightArmYaw = null;
-		Float rightArmPitch = null;
-		Boolean leftArmFollowSight = null;
-		Boolean rightArmFollowSight = null;
+		ArmModelProperties leftArm = new ArmModelProperties();
+		ArmModelProperties rightArm = new ArmModelProperties();
 
-		if (json.has("arms")) {
-			JsonObject armsObject = json.getAsJsonObject("arms");
-
-			if (armsObject.has("left")) {
-				JsonObject leftArmObject = armsObject.getAsJsonObject("left");
-
-				if (leftArmObject.has("yaw")) leftArmYaw = leftArmObject.get("yaw").getAsFloat();
-				if (leftArmObject.has("pitch")) leftArmPitch = leftArmObject.get("pitch").getAsFloat();
-				if (leftArmObject.has("follow_sight")) leftArmFollowSight = leftArmObject.get("follow_sight").getAsBoolean();
+		if (json.has("arm_properties")) {
+			JsonObject armProperties = json.getAsJsonObject("arm_properties");
+			if (armProperties.has("held_mainhand")) {
+				rightArm.setFromJson(armProperties.getAsJsonObject("held_mainhand"));
 			}
-
-			if (armsObject.has("right")) {
-				JsonObject rightArmObject = armsObject.getAsJsonObject("right");
-
-				if (rightArmObject.has("yaw")) rightArmYaw = rightArmObject.get("yaw").getAsFloat();
-				if (rightArmObject.has("pitch")) rightArmPitch = rightArmObject.get("pitch").getAsFloat();
-				if (rightArmObject.has("follow_sight")) rightArmFollowSight = rightArmObject.get("follow_sight").getAsBoolean();
+			if (armProperties.has("held_offhand")) {
+				leftArm.setFromJson(armProperties.getAsJsonObject("held_offhand"));
 			}
 		}
 
 		ArmModelsContainer armModels = (ArmModelsContainer) original;
 
-		if (leftArmYaw != null) armModels.setLeftArmYaw(leftArmYaw);
-		if (leftArmPitch != null) armModels.setLeftArmPitch(leftArmPitch);
-		if (leftArmFollowSight != null) armModels.setLeftArmFollowSight(leftArmFollowSight);
-		if (rightArmYaw != null) armModels.setRightArmYaw(rightArmYaw);
-		if (rightArmPitch != null) armModels.setRightArmPitch(rightArmPitch);
-		if (rightArmFollowSight != null) armModels.setRightArmFollowSight(rightArmFollowSight);
+		armModels.getLeftArmModelProperties().set(leftArm);
+		armModels.getRightArmModelProperties().set(rightArm);
 
 		return original;
 	}

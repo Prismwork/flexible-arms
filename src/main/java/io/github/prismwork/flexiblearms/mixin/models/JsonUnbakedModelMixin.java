@@ -20,18 +20,8 @@ public abstract class JsonUnbakedModelMixin {
 		ArmModelsContainer sourceArmModels = (ArmModelsContainer) this;
 		ArmModelsContainer targetArmModels = (ArmModelsContainer) original;
 
-		if (sourceArmModels.getLeftArmYaw() != null)
-			targetArmModels.setLeftArmYaw(sourceArmModels.getLeftArmYaw());
-		if (sourceArmModels.getLeftArmPitch() != null)
-			targetArmModels.setLeftArmPitch(sourceArmModels.getLeftArmPitch());
-		if (sourceArmModels.leftArmFollowSight() != null)
-			targetArmModels.setLeftArmFollowSight(sourceArmModels.leftArmFollowSight());
-		if (sourceArmModels.getRightArmYaw() != null)
-			targetArmModels.setRightArmYaw(sourceArmModels.getRightArmYaw());
-		if (sourceArmModels.getRightArmPitch() != null)
-			targetArmModels.setRightArmPitch(sourceArmModels.getRightArmPitch());
-		if (sourceArmModels.rightArmFollowSight() != null)
-			targetArmModels.setRightArmFollowSight(sourceArmModels.rightArmFollowSight());
+		targetArmModels.getLeftArmModelProperties().set(sourceArmModels.getLeftArmModelProperties());
+		targetArmModels.getRightArmModelProperties().set(sourceArmModels.getRightArmModelProperties());
 
 		return original;
 	}
